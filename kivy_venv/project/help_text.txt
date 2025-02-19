@@ -1,0 +1,34 @@
+HOW TO PLAY:
+
+w-a-s-d are used to move the cannon, up-left-down-right respectively,
+
+"spacebar" fires the bullet, the bullet has a costs of 1 shot,
+"B" fires the bomb, the bomb has a costs of 3 shot,
+"L" fires the laser, the laser has a costs of 7 shot and can be fired only when all the rocks are cleared.
+
+to increase or reduce the power output of the cannon, i.e. the distance of the projectile, press
+
+"M" to increase it 
+"N" to reduce it 
+
+the power of the cannon starts from 35 and can go up to 100.
+
+HARD MODE:
+the game is the same as in the normal mode but,
+
+the cannon will have a fixed position,
+
+there is a timer of one minute, if you it the target it will be increased of 2 seconds for each hi.
+
+
+HOW TO WIN:
+
+to win hit the target 20 times,
+
+scoring system and leaderboard: 
+
+from the score will be deducted the bullet fired, so think before you shoot, 
+keep in minde that in hard mode the point given are more geneourous, but the deducted are the same.
+
+the best 10 players are gonna be displayed in the leaderboard.
+

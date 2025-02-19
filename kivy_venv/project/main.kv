@@ -1,0 +1,368 @@
+
+ScreenManager:
+    NameInputScreen
+    MenuScreen:
+    GameScreen:
+    GameOverScreen:
+    LoserScreen:
+
+
+#Defining the cannon object so that it is rotable
+<Cannon>
+    angle: 0
+    size: 182, 130
+    source: 'cannon.png'
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: self.angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+<NameInputScreen>:
+    name: 'name'
+    FloatLayout:
+        Background:
+            id: background
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "background.png"
+
+<MenuScreen>:
+    name: 'menu'
+
+
+#Creating the background
+    Background:
+        id: background
+        canvas.before:
+            Rectangle:
+                size: (1920, 1080)
+                pos: self.pos
+                source: "background.png"
+
+# Creating the clouds that will move on the background as part of the bg
+            Rectangle:
+                size: self.width, 193
+                pos: self.pos[0], self.height - 200
+                texture: self.cloud_texture
+    Button:
+        id:reset_button
+        text: "reset game"
+        pos_hint: {'center_x': 0.4, 'center_y': 0.3}
+        size: 100, 70
+        size_hint: None, None
+        on_release: root.quit_game()
+
+    Button:
+        background_normal: 'play.png'
+        id: play_button
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size: 200, 150
+        size_hint: None, None
+        on_release:
+            root.go_to_game('normal')
+        disabled: False
+        opacity: 1
+
+
+
+
+    Button:
+        id: leadership_button
+        background_normal: 'medal.png'
+        size_hint: None, None
+        pos_hint: {'center_x': 0.8, 'center_y': 0.5}
+        on_release:
+            root.show_leaderboard()
+        opacity: 1
+        disabled: False
+
+    Label:
+        id: leaderboard_label
+        text: ''
+        color: 0, 0, 0, 1  # Set text color to black
+        size_hint_y: None
+        pos_hint: {'center_x': 0.7, 'center_y': 0.5}
+        height: 400
+
+    Button:
+        id: back_button
+        text: 'Back'
+        size_hint: 0.1, 0.05
+        pos_hint: {'right': 0.95, 'top': 0.95}
+        opacity: 0
+        disabled: True
+        on_release: root.hide_leaderboard()
+
+    Button:
+        id: hard_button
+        text: 'Hard Mode'
+        size_hint: None, None
+        size: (100,100)
+        pos: (400,400)
+        on_release: root.go_to_game('hard')
+        disabled: False
+        opacity: 1
+    Button:
+        id: load_button
+        text: 'continue'
+        size_hint: None, None
+        size: (100,100)
+        pos_hint: {'center_x': 0.7, 'center_y': 0.5}
+        on_release:
+            app.root.current = 'game'
+            app.root.get_screen('game').load_game()
+        disabled: True
+        opacity: 0
+
+
+    Button:
+        id: help_button
+        pos_hint: {'center_x': 0.6, 'center_y': 0.3}
+        size: 70, 70
+        background_normal: 'help.png'  # Set the image for the button
+        size_hint: None, None
+        on_release:
+            root.show_help()
+        opacity: 1
+        disabled: False
+
+    Label:
+        id: help_label
+        text: 'This is the help text providing information about the game.'
+        color: 0, 0, 0, 1  # Set text color to black
+        opacity: 0  # Initially hidden
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White background for the help label
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: (0.8, 0.4)
+
+        Button:
+            text: 'Back'
+            size_hint: 0.1, 0.05
+            pos_hint: {'right': 0.95, 'top': 0.95}
+            on_release:
+                root.hide_help()
+
+
+<GameScreen>:
+    name: 'game'
+
+
+
+
+#Creating the background
+    Background:
+        id: background
+        canvas.before:
+            Rectangle:
+                size: (1920, 1080)
+                pos: self.pos
+                source: "background.png"
+
+# Creating the clouds that will move on the background as part of the bg
+            Rectangle:
+                size: self.width, 193
+                pos: self.pos[0], self.height - 200
+                texture: self.cloud_texture
+
+
+    Button:
+        text: "Quit"
+        size_hint: (None, None)
+        size: (200, 50)
+        pos: root.width - self.width - 10, root.height - self.height - 10
+        on_release: root.show_menu()
+
+    Button:
+        text: 'Save'
+        size_hint: (None, None)
+        size: (200, 50)
+        pos: root.width - self.width - 10, root.height - self.height - 60
+        on_release:
+            root.save_game()
+            app.root.current = 'menu'
+
+
+    Cannon:
+        id: cannon
+        angle: 0
+        size_hint: None, None
+        size: self.size
+        pos: 30, 50
+        size: 182, 130
+
+
+    Bullet:
+        id: bullet
+        source: "bullet.png"
+        size_hint: None, None
+        size: 40, 40
+        opacity: 0
+
+    Bombshell:
+        id: bomb
+        source: "bombshell.png"
+        size_hint: None, None
+        pos: 90, 80
+        size: 80, 90
+        opacity: 0
+
+    Laser:
+        id: laser
+        source: "lasertag.png"
+        size_hint: None, None
+        size: 60, 60
+        opacity: 0
+
+    Mirror:
+        id: mirror
+        size_hint: None, None
+        size: 10, 100
+        pos: 500, 40
+
+    Rock:
+        id: rock
+        size: 118, 91
+        size_hint: None, None
+        source: "rock.png"
+        opacity: 0
+
+    Perpetio:
+        id: un_rock
+        size: 150, 120
+        size_hint: None, None
+        source: "un_rock.png"
+        opacity: 0
+
+    Label:
+        id: shots_label
+        text: 'Shots: 0'
+        font_size: 24
+        pos: 10, root.height - 80
+        size_hint: None, None
+
+    Label:
+        id: hit_counter_label
+        text: 'Hits: 0'
+        font_size: 24
+        pos: 190, root.height - 80
+        size_hint: None, None
+    Label:
+        id: power_output_label
+        text: 'Power Output: 35'
+        font_size: 24
+        size_hint: None, None
+        pos: 400, root.height - 80
+
+    Label:
+        id: timer_label
+        text: 'Time Left: 60'
+        font_size: 24
+        size_hint: None, None
+        pos: 20, root.height - 300
+
+
+<GameOverScreen>:
+    name: 'game_over'
+
+    FloatLayout:
+        Background:
+            id: background
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "background.png"
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+
+        Label:
+            id: final_score_label
+            text: 'You win!'
+            size_hint: 0.8, 0.2
+            pos_hint: {'center_x': 0.5}
+            font_size: '24sp'
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        Button:
+            text: 'Restart Game'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.5, 0.5, 0.8, 1
+            on_press: root.restart_game()
+
+        Button:
+            text: 'Return to Menu'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.8, 0.5, 0.5, 1
+            on_press: root.return_to_menu()
+
+        Button:
+            text: 'Change Name'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.5, 0.8, 0.5, 1
+            on_release: root.change_name()
+
+<LoserScreen>:
+    name: 'loser'
+
+    FloatLayout:
+        Background:
+            id: background
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "background.png"
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+
+        Label:
+            id: final_score_label
+            text: 'You lose!'
+            size_hint: 0.8, 0.2
+            pos_hint: {'center_x': 0.5}
+            font_size: '24sp'
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        Button:
+            text: 'Restart Game'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.5, 0.5, 0.8, 1
+            on_press: root.restart_game()
+
+        Button:
+            text: 'Return to Menu'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.8, 0.5, 0.5, 1
+            on_press: root.return_to_menu()
+
+        Button:
+            text: 'Change Name'
+            size_hint: 0.6, 0.1
+            pos_hint: {'center_x': 0.5}
+            background_color: 0.5, 0.8, 0.5, 1
+            on_release: root.change_name()
